@@ -1,8 +1,8 @@
 import type { LinksFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
-import indexStylesUrl from "../../styles/index.css";
-import type { Pokemon } from "@prisma/client";
+import { useLoaderData, Link } from "@remix-run/react";
+import indexStylesUrl from "~/styles/index.css";
+//import type { Pokemon } from "@prisma/client";
 import { db } from "~/utils/db.server";
 
 export const loader = async () => {
@@ -24,8 +24,9 @@ export default function PokemonsIndexRoute() {
 			<ul>
 				{data.pokemons.map(pokemon => (
 					<li key={pokemon.id}>
-						{" "}
-						{pokemon.name} - {pokemon.number}
+						<Link to={`/pokemons/${pokemon.id}`}>
+							{pokemon.name} - {pokemon.number}
+						</Link>
 					</li>
 				))}
 			</ul>

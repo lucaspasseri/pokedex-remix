@@ -11,10 +11,10 @@ datasource db {
 }
 
 model Pokemon {
-	id String @id @default( uuid())
+	//id String @id @default( uuid())
 	//createdAt DateTime @default(now())
+	number Int @id
 	name String
-	number Int
 	image String
 	type String
 }

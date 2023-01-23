@@ -1,6 +1,5 @@
 import type { LinksFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-//import { Outlet, Link } from "@remix-run/react";
 import indexStylesUrl from "~/styles/index.css";
 import tailwindStylesUrl from "~/styles/app.css";
 import { db } from "~/utils/db.server";
@@ -19,11 +18,9 @@ export const loader = async ({ params }: LoaderArgs) => {
 
 	const pokemon = {
 		pokemon: await db.pokemon.findUnique({
-			where: { id: params.pokemonId },
+			where: { number: Number(params.pokemonNumber) },
 		}),
 	};
-
-	console.log(pokemon);
 	return json(pokemon);
 };
 
@@ -31,16 +28,21 @@ export default function PokemonRoute() {
 	const data = useLoaderData<typeof loader>();
 
 	return (
-		<div
-			className="p-2 text-3xl font-bold underline bg-slate-50"
-			style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}
-		>
-			<h1 className="p-2 text-3xl font-bold underline bg-slate-50">
-				{data.pokemon?.name} - {data.pokemon?.number}
-			</h1>
-			<div className="p-2 text-3xl font-bold underline bg-slate-50">
-				<img src={data.pokemon?.image} />
-			</div>
+		<div className="ml-4 p-2 font-bold bg-slate-50 w-80 flex flex-col items-center">
+			<h2 className="p-2 font-bold bg-slate-50 self-start">
+				{data.pokemon?.number}
+			</h2>
+
+			<img
+				src={data.pokemon?.image}
+				width="160rem"
+				height="auto"
+				alt={`pokemon: ${data.pokemon?.name}`}
+			/>
+
+			<h3>{data.pokemon?.name}</h3>
+
+			<h4>{data.pokemon?.type}</h4>
 		</div>
 	);
 }

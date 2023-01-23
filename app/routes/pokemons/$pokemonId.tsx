@@ -36,13 +36,10 @@ export default function PokemonRoute() {
 			style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}
 		>
 			<h1 className="p-2 text-3xl font-bold underline bg-slate-50">
-				Welcome to Remix 1
+				{data.pokemon?.name} - {data.pokemon?.number}
 			</h1>
 			<div className="p-2 text-3xl font-bold underline bg-slate-50">
-				{data.pokemon?.name}
-			</div>
-			<div className="p-2 text-3xl font-bold underline bg-slate-50">
-				{data.pokemon?.number}
+				<img src={data.pokemon?.image} />
 			</div>
 		</div>
 	);

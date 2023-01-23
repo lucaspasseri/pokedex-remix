@@ -9,7 +9,7 @@ export const links: LinksFunction = () => {
 export default function PokemonsRoute() {
 	return (
 		<div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
-			<h1>Welcome to Remix 2</h1>
+			<h1>List de Pokemons</h1>
 			<Outlet />
 		</div>
 	);

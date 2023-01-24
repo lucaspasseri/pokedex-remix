@@ -14,11 +14,12 @@ export const links: LinksFunction = () => {
 };
 
 export const loader = async ({ params }: LoaderArgs) => {
-	console.log({ params });
-
 	const pokemon = {
 		pokemon: await db.pokemon.findUnique({
 			where: { number: Number(params.pokemonNumber) },
+			include: {
+				types: true,
+			},
 		}),
 	};
 	return json(pokemon);
@@ -42,7 +43,13 @@ export default function PokemonRoute() {
 
 			<h3>{data.pokemon?.name}</h3>
 
-			<h4>{data.pokemon?.type}</h4>
+			<ul>
+				{data?.pokemon?.types.map(type => (
+					<li key={type.id}>
+						<h4>{type.typeName}</h4>
+					</li>
+				))}
+			</ul>
 		</div>
 	);
 }

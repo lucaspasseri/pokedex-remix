@@ -10,11 +10,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Pokemon {
-	//id String @id @default( uuid())
-	//createdAt DateTime @default(now())
-	number Int @id
-	name String
-	image String
-	type String
+model Type { 
+	name 		 String  @id
+	pokemons PokemonType[] 
 }
+model PokemonType {
+	id			 Int @id @default(autoincrement())
+	type Type @relation(fields: [typeName], references: [name])
+	typeName String 
+	pokemon Pokemon @relation(fields: [pokemonNumber], references: [number])
+	pokemonNumber Int
+}
+model Pokemon {
+	number Int @id
+	name String @unique
+	image String
+	types PokemonType[]
+	weight Int
+	height Int
+}
+
+

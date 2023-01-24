@@ -5,16 +5,26 @@ export async function createPokemon(id: number) {
 		res.json()
 	);
 
+	const pokemonNumber = res.id;
+
+	const formattedTypes = res.types.map(type => ({
+		pokemonNumber: pokemonNumber,
+		typeName: type.type.name,
+	}));
+
 	const formattedPokemon = {
-		number: res.id,
+		number: pokemonNumber,
 		name: res.name,
 		image: res.sprites.front_default,
-		type: res.types[0].type.name,
+		weight: res.weight,
+		height: res.height,
 	};
 
-	console.log({ formattedPokemon });
-
 	await db.pokemon.create({ data: formattedPokemon });
+
+	formattedTypes.forEach(
+		async type => await db.pokemonType.create({ data: type })
+	);
 
 	return null;
 }

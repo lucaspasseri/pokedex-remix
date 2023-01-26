@@ -4,7 +4,9 @@ import indexStylesUrl from "~/styles/index.css";
 import tailwindStylesUrl from "~/styles/app.css";
 import { db } from "~/utils/db.server";
 import type { LoaderArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
+import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
+import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOutlined";
 
 export const links: LinksFunction = () => {
 	return [
@@ -26,13 +28,39 @@ export const loader = async ({ params }: LoaderArgs) => {
 };
 
 export default function PokemonRoute() {
+	const maxPokemonNumber = 150;
+	const currentPathnameWithoutParams = "/pokemons/";
 	const data = useLoaderData<typeof loader>();
 
 	return (
-		<div className="ml-4 p-2 font-bold bg-slate-50 w-80 flex flex-col items-center">
-			<h2 className="p-2 font-bold bg-slate-50 self-start">
-				{data.pokemon?.number}
-			</h2>
+		<div className="ml-4 p-2 font-bold bg-slate-50 w-1/3 flex flex-col items-center">
+			<div className="self-start w-full">
+				<h2 className="p-2 font-bold bg-slate-50">{data.pokemon?.number}</h2>
+				<div className="flex justify-between">
+					<div>
+						{data.pokemon && data.pokemon.number > 1 && (
+							<Link
+								to={
+									currentPathnameWithoutParams + String(data.pokemon.number - 1)
+								}
+							>
+								<ArrowCircleLeftOutlinedIcon fontSize="large" />
+							</Link>
+						)}
+					</div>
+					<div>
+						{data.pokemon && data.pokemon.number < maxPokemonNumber && (
+							<Link
+								to={
+									currentPathnameWithoutParams + String(data.pokemon.number + 1)
+								}
+							>
+								<ArrowCircleRightOutlinedIcon fontSize="large" />
+							</Link>
+						)}
+					</div>
+				</div>
+			</div>
 
 			<img
 				src={data.pokemon?.image}
@@ -50,6 +78,9 @@ export default function PokemonRoute() {
 					</li>
 				))}
 			</ul>
+
+			<p>Altura: {data.pokemon?.height && `${data.pokemon?.height / 10} m`}</p>
+			<p>Peso: {data.pokemon?.weight && `${data.pokemon?.weight / 10} kg`}</p>
 		</div>
 	);
 }

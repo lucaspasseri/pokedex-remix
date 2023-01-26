@@ -36,7 +36,9 @@ export default function PokemonsRoute() {
 						{data.pokemons.map(pokemon => (
 							<li key={pokemon.number} className="capitalize hover:bg-red-400">
 								<Link to={`/pokemons/${pokemon.number}`}>
-									{pokemon.number} - {pokemon.name}
+									<h5>
+										{pokemon.number} - {pokemon.name}
+									</h5>
 								</Link>
 							</li>
 						))}

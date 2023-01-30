@@ -1,5 +1,5 @@
 import { db } from "~/utils/db.server";
-
+import getPredecessor from "~/utils/helper/getPredecessor";
 export async function createPokemon(id: number) {
 	const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`).then(res =>
 		res.json()
@@ -12,12 +12,16 @@ export async function createPokemon(id: number) {
 		typeName: type.type.name,
 	}));
 
+	const predecessor = getPredecessor(Number(pokemonNumber));
+	console.log({ predecessor });
+
 	const formattedPokemon = {
 		number: pokemonNumber,
 		name: res.name,
 		image: res.sprites.front_default,
 		weight: res.weight,
 		height: res.height,
+		predecessorNumber: predecessor,
 	};
 
 	await db.pokemon.create({ data: formattedPokemon });

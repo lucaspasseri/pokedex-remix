@@ -21,13 +21,15 @@ model PokemonType {
 	pokemon Pokemon @relation(fields: [pokemonNumber], references: [number])
 	pokemonNumber Int
 }
+
 model Pokemon {
-	number Int @id
+	number Int @id @unique
 	name String @unique
 	image String
 	types PokemonType[]
 	weight Int
 	height Int
+	successor Pokemon[] @relation(name: "evolutions")
+	predecessor Pokemon? @relation(name: "evolutions", fields: [predecessorNumber], references: [number])
+	predecessorNumber Int? 
 }
-
-

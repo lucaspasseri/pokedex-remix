@@ -5,8 +5,10 @@ import tailwindStylesUrl from "~/styles/app.css";
 import { db } from "~/utils/db.server";
 import type { LoaderArgs } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
-import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOutlined";
+//import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
+//import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOutlined";
+import ArrowCircleDownSharpIcon from "@mui/icons-material/ArrowCircleDownSharp";
+import ArrowCircleUpSharpIcon from "@mui/icons-material/ArrowCircleUpSharp";
 
 export const links: LinksFunction = () => {
 	return [
@@ -21,6 +23,8 @@ export const loader = async ({ params }: LoaderArgs) => {
 			where: { number: Number(params.pokemonNumber) },
 			include: {
 				types: true,
+				predecessor: true,
+				successor: true,
 			},
 		}),
 	};
@@ -28,16 +32,18 @@ export const loader = async ({ params }: LoaderArgs) => {
 };
 
 export default function PokemonRoute() {
-	const maxPokemonNumber = 150;
+	//const maxPokemonNumber = 150;
 	const currentPathnameWithoutParams = "/pokemons/";
 	const data = useLoaderData<typeof loader>();
+
+	console.log({ data });
 
 	return (
 		<div className="ml-4 p-2 font-bold bg-slate-50 w-1/3 flex flex-col items-center">
 			<div className="self-start w-full">
 				<h2 className="p-2 font-bold bg-slate-50">{data.pokemon?.number}</h2>
-				<div className="flex justify-between">
-					<div>
+				<div className="flex justify-center ">
+					{/* <div>
 						{data.pokemon && data.pokemon.number > 1 && (
 							<Link
 								to={
@@ -47,8 +53,32 @@ export default function PokemonRoute() {
 								<ArrowCircleLeftOutlinedIcon fontSize="large" />
 							</Link>
 						)}
+					</div> */}
+					<div className="mr-24">
+						{data.pokemon && data.pokemon.predecessor && (
+							<Link
+								to={
+									currentPathnameWithoutParams +
+									String(data.pokemon.predecessor.number)
+								}
+							>
+								<ArrowCircleDownSharpIcon fontSize="large" />
+							</Link>
+						)}
 					</div>
 					<div>
+						{data.pokemon && data.pokemon.successor.length > 0 && (
+							<Link
+								to={
+									currentPathnameWithoutParams +
+									String(data.pokemon.successor[0]?.number)
+								}
+							>
+								<ArrowCircleUpSharpIcon fontSize="large" />
+							</Link>
+						)}
+					</div>
+					{/* <div>
 						{data.pokemon && data.pokemon.number < maxPokemonNumber && (
 							<Link
 								to={
@@ -58,7 +88,7 @@ export default function PokemonRoute() {
 								<ArrowCircleRightOutlinedIcon fontSize="large" />
 							</Link>
 						)}
-					</div>
+					</div> */}
 				</div>
 			</div>
 

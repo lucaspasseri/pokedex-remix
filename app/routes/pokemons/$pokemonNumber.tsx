@@ -5,10 +5,8 @@ import tailwindStylesUrl from "~/styles/app.css";
 import { db } from "~/utils/db.server";
 import type { LoaderArgs } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
-import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOutlined";
-import ArrowCircleDownSharpIcon from "@mui/icons-material/ArrowCircleDownSharp";
-import ArrowCircleUpSharpIcon from "@mui/icons-material/ArrowCircleUpSharp";
+import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 
 export const links: LinksFunction = () => {
 	return [
@@ -49,7 +47,7 @@ export default function PokemonRoute() {
 									currentPathnameWithoutParams + String(data.pokemon.number - 1)
 								}
 							>
-								<ArrowCircleLeftOutlinedIcon fontSize="large" />
+								<ArrowLeftIcon fontSize="large" color="primary" />
 							</Link>
 						)}
 					</div>
@@ -67,7 +65,7 @@ export default function PokemonRoute() {
 									currentPathnameWithoutParams + String(data.pokemon.number + 1)
 								}
 							>
-								<ArrowCircleRightOutlinedIcon fontSize="large" />
+								<ArrowRightIcon fontSize="large" color="primary" />
 							</Link>
 						)}
 					</div>
@@ -83,7 +81,6 @@ export default function PokemonRoute() {
 								String(data.pokemon.predecessor.number)
 							}
 						>
-							{/* <ArrowCircleDownSharpIcon fontSize="large" /> */}
 							<img
 								src={data.pokemon?.predecessor.image}
 								alt={`pokemon: ${data.pokemon?.predecessor.name}`}
@@ -107,7 +104,6 @@ export default function PokemonRoute() {
 								String(data.pokemon.successor[0]?.number)
 							}
 						>
-							{/* <ArrowCircleUpSharpIcon fontSize="large" /> */}
 							<img
 								src={data.pokemon?.successor[0].image}
 								width="80rem"

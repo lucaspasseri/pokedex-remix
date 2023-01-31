@@ -5,8 +5,8 @@ import tailwindStylesUrl from "~/styles/app.css";
 import { db } from "~/utils/db.server";
 import type { LoaderArgs } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-//import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
-//import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOutlined";
+import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
+import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOutlined";
 import ArrowCircleDownSharpIcon from "@mui/icons-material/ArrowCircleDownSharp";
 import ArrowCircleUpSharpIcon from "@mui/icons-material/ArrowCircleUpSharp";
 
@@ -32,18 +32,17 @@ export const loader = async ({ params }: LoaderArgs) => {
 };
 
 export default function PokemonRoute() {
-	//const maxPokemonNumber = 150;
+	const maxPokemonNumber = 150;
 	const currentPathnameWithoutParams = "/pokemons/";
 	const data = useLoaderData<typeof loader>();
 
 	console.log({ data });
 
 	return (
-		<div className="ml-4 p-2 font-bold bg-slate-50 w-1/3 flex flex-col items-center">
+		<div className="ml-4 p-2 font-bold bg-slate-800 w-2/5 flex flex-col items-center">
 			<div className="self-start w-full">
-				<h2 className="p-2 font-bold bg-slate-50">{data.pokemon?.number}</h2>
-				<div className="flex justify-center ">
-					{/* <div>
+				<div className="flex justify-center items-center border-4 border-blue-900 mb-16  bg-slate-50 ">
+					<div className="w-10">
 						{data.pokemon && data.pokemon.number > 1 && (
 							<Link
 								to={
@@ -53,32 +52,15 @@ export default function PokemonRoute() {
 								<ArrowCircleLeftOutlinedIcon fontSize="large" />
 							</Link>
 						)}
-					</div> */}
-					<div className="mr-24">
-						{data.pokemon && data.pokemon.predecessor && (
-							<Link
-								to={
-									currentPathnameWithoutParams +
-									String(data.pokemon.predecessor.number)
-								}
-							>
-								<ArrowCircleDownSharpIcon fontSize="large" />
-							</Link>
-						)}
 					</div>
-					<div>
-						{data.pokemon && data.pokemon.successor.length > 0 && (
-							<Link
-								to={
-									currentPathnameWithoutParams +
-									String(data.pokemon.successor[0]?.number)
-								}
-							>
-								<ArrowCircleUpSharpIcon fontSize="large" />
-							</Link>
-						)}
+
+					<div className="w-14">
+						<h2 className="p-2 font-boldmt-auto mb-auto flex justify-evenly">
+							{data.pokemon?.number}
+						</h2>
 					</div>
-					{/* <div>
+
+					<div className="w-10">
 						{data.pokemon && data.pokemon.number < maxPokemonNumber && (
 							<Link
 								to={
@@ -88,29 +70,71 @@ export default function PokemonRoute() {
 								<ArrowCircleRightOutlinedIcon fontSize="large" />
 							</Link>
 						)}
-					</div> */}
+					</div>
 				</div>
 			</div>
 
-			<img
-				src={data.pokemon?.image}
-				width="160rem"
-				height="auto"
-				alt={`pokemon: ${data.pokemon?.name}`}
-			/>
+			<div className="flex items-center justify-evenly w-full mb-12">
+				<div className="w-20 shadow-[0_10px_50px_rgba(8,_112,_184,_0.7)]">
+					{data.pokemon && data.pokemon.predecessor && (
+						<Link
+							to={
+								currentPathnameWithoutParams +
+								String(data.pokemon.predecessor.number)
+							}
+						>
+							{/* <ArrowCircleDownSharpIcon fontSize="large" /> */}
+							<img
+								src={data.pokemon?.predecessor.image}
+								alt={`pokemon: ${data.pokemon?.predecessor.name}`}
+							/>
+						</Link>
+					)}
+				</div>
 
-			<h3>{data.pokemon?.name}</h3>
+				<img
+					className="shadow-[0_10px_50px_rgba(240,_46,_170,_0.7)]"
+					src={data.pokemon?.image}
+					width="160rem"
+					height="auto"
+					alt={`pokemon: ${data.pokemon?.name}`}
+				/>
+				<div className="w-20 shadow-[0_10px_50px_rgba(8,_112,_184,_0.7)]">
+					{data.pokemon && data.pokemon.successor.length > 0 && (
+						<Link
+							to={
+								currentPathnameWithoutParams +
+								String(data.pokemon.successor[0]?.number)
+							}
+						>
+							{/* <ArrowCircleUpSharpIcon fontSize="large" /> */}
+							<img
+								src={data.pokemon?.successor[0].image}
+								width="80rem"
+								height="auto"
+								alt={`pokemon: ${data.pokemon?.successor[0].name}`}
+							/>
+						</Link>
+					)}
+				</div>
+			</div>
+
+			<h3 className="text-slate-100">{data.pokemon?.name}</h3>
 
 			<ul>
 				{data?.pokemon?.types.map(type => (
 					<li key={type.id}>
-						<h4>{type.typeName}</h4>
+						<h4 className="text-slate-100">{type.typeName}</h4>
 					</li>
 				))}
 			</ul>
 
-			<p>Altura: {data.pokemon?.height && `${data.pokemon?.height / 10} m`}</p>
-			<p>Peso: {data.pokemon?.weight && `${data.pokemon?.weight / 10} kg`}</p>
+			<p className="text-slate-100">
+				Altura: {data.pokemon?.height && `${data.pokemon?.height / 10} m`}
+			</p>
+			<p className="text-slate-100">
+				Peso: {data.pokemon?.weight && `${data.pokemon?.weight / 10} kg`}
+			</p>
 		</div>
 	);
 }

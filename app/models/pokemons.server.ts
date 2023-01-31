@@ -1,5 +1,7 @@
 import { db } from "~/utils/db.server";
+import { fetch } from "@remix-run/web-fetch";
 import getPredecessor from "~/utils/helper/getPredecessor";
+
 export async function createPokemon(id: number) {
 	const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`).then(res =>
 		res.json()

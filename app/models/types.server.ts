@@ -1,4 +1,5 @@
 import { db } from "~/utils/db.server";
+import { fetch } from "@remix-run/web-fetch";
 
 export async function createPokemonTypeTable() {
 	const res = await fetch("https://pokeapi.co/api/v2/type/").then(res =>

@@ -26,7 +26,19 @@ export const loader = async ({ params }: LoaderArgs) => {
 			},
 		}),
 	};
-	return json(pokemon);
+
+	const matchups = {
+		matchups: await db.matchup.findMany(),
+	};
+
+	const [pokemonRes, matchupsRes] = await Promise.all([pokemon, matchups]);
+
+	return json({ pokemonRes, matchupsRes });
+
+	// return {
+	// 	pokemon: json(pokemon),
+	// 	matchups: json(matchups),
+	// };
 };
 
 export default function PokemonRoute() {
@@ -36,16 +48,36 @@ export default function PokemonRoute() {
 
 	console.log({ data });
 
+	const pokemon = data.pokemonRes.pokemon;
+	const matchups = data.matchupsRes.matchups;
+
+	console.log(pokemon);
+	console.log(matchups);
+
+	const filteredDefensivesMatchups = matchups.filter(matchup =>
+		pokemon?.types.some(type => type.typeName === matchup.typeBName)
+	);
+
+	console.log({ filteredDefensivesMatchups });
+
+	const effectiveMatchups = filteredDefensivesMatchups.filter(
+		matchup => matchup.effectiveness > 1
+	);
+
+	const noEffectiveMatchups = filteredDefensivesMatchups.filter(
+		matchup => matchup.effectiveness < 1
+	);
+
+	console.log({ effectiveMatchups, noEffectiveMatchups });
+
 	return (
 		<div className="ml-4 p-2 font-bold bg-slate-800 w-2/5 flex flex-col items-center">
 			<div className="self-start w-full">
 				<div className="flex justify-center items-center border-4 border-blue-900 mb-16  bg-slate-50 ">
 					<div className="w-10">
-						{data.pokemon && data.pokemon.number > 1 && (
+						{pokemon && pokemon.number > 1 && (
 							<Link
-								to={
-									currentPathnameWithoutParams + String(data.pokemon.number - 1)
-								}
+								to={currentPathnameWithoutParams + String(pokemon.number - 1)}
 							>
 								<ArrowLeftIcon fontSize="large" color="primary" />
 							</Link>
@@ -54,16 +86,14 @@ export default function PokemonRoute() {
 
 					<div className="w-14">
 						<h2 className="p-2 font-boldmt-auto mb-auto flex justify-evenly">
-							{data.pokemon?.number}
+							{pokemon?.number}
 						</h2>
 					</div>
 
 					<div className="w-10">
-						{data.pokemon && data.pokemon.number < maxPokemonNumber && (
+						{pokemon && pokemon.number < maxPokemonNumber && (
 							<Link
-								to={
-									currentPathnameWithoutParams + String(data.pokemon.number + 1)
-								}
+								to={currentPathnameWithoutParams + String(pokemon.number + 1)}
 							>
 								<ArrowRightIcon fontSize="large" color="primary" />
 							</Link>
@@ -74,16 +104,16 @@ export default function PokemonRoute() {
 
 			<div className="flex items-center justify-evenly w-full mb-12">
 				<div className="w-20 shadow-[0_10px_50px_rgba(8,_112,_184,_0.7)]">
-					{data.pokemon && data.pokemon.predecessor && (
+					{pokemon && pokemon.predecessor && (
 						<Link
 							to={
 								currentPathnameWithoutParams +
-								String(data.pokemon.predecessor.number)
+								String(pokemon.predecessor.number)
 							}
 						>
 							<img
-								src={data.pokemon?.predecessor.image}
-								alt={`pokemon: ${data.pokemon?.predecessor.name}`}
+								src={pokemon?.predecessor.image}
+								alt={`pokemon: ${pokemon?.predecessor.name}`}
 							/>
 						</Link>
 					)}
@@ -91,34 +121,34 @@ export default function PokemonRoute() {
 
 				<img
 					className="shadow-[0_10px_50px_rgba(240,_46,_170,_0.7)]"
-					src={data.pokemon?.image}
+					src={pokemon?.image}
 					width="160rem"
 					height="auto"
-					alt={`pokemon: ${data.pokemon?.name}`}
+					alt={`pokemon: ${pokemon?.name}`}
 				/>
 				<div className="w-20 shadow-[0_10px_50px_rgba(8,_112,_184,_0.7)]">
-					{data.pokemon && data.pokemon.successor.length > 0 && (
+					{pokemon && pokemon.successor?.length > 0 && (
 						<Link
 							to={
 								currentPathnameWithoutParams +
-								String(data.pokemon.successor[0]?.number)
+								String(pokemon.successor[0]?.number)
 							}
 						>
 							<img
-								src={data.pokemon?.successor[0].image}
+								src={pokemon?.successor[0].image}
 								width="80rem"
 								height="auto"
-								alt={`pokemon: ${data.pokemon?.successor[0].name}`}
+								alt={`pokemon: ${pokemon?.successor[0].name}`}
 							/>
 						</Link>
 					)}
 				</div>
 			</div>
 
-			<h3 className="text-slate-100">{data.pokemon?.name}</h3>
+			<h3 className="text-slate-100">{pokemon?.name}</h3>
 
 			<ul>
-				{data?.pokemon?.types.map(type => (
+				{data?.pokemon?.types?.map(type => (
 					<li key={type.id}>
 						<h4 className="text-slate-100">{type.typeName}</h4>
 					</li>
@@ -126,11 +156,29 @@ export default function PokemonRoute() {
 			</ul>
 
 			<p className="text-slate-100">
-				Altura: {data.pokemon?.height && `${data.pokemon?.height / 10} m`}
+				Altura: {pokemon?.height && `${pokemon?.height / 10} m`}
 			</p>
 			<p className="text-slate-100">
-				Peso: {data.pokemon?.weight && `${data.pokemon?.weight / 10} kg`}
+				Peso: {pokemon?.weight && `${pokemon?.weight / 10} kg`}
 			</p>
+			<div className="flex mt-8">
+				<ul className="p-4 border">
+					<p> Frágil contra:</p>
+					{effectiveMatchups.map(matchup => (
+						<li key={matchup.id}>
+							<p className="text-slate-100">{matchup.typeAName}</p>
+						</li>
+					))}
+				</ul>
+				<ul className="p-4 border">
+					<p> Resistente contra:</p>
+					{noEffectiveMatchups.map(matchup => (
+						<li key={matchup.id}>
+							<p className="text-slate-100">{matchup.typeAName}</p>
+						</li>
+					))}
+				</ul>
+			</div>
 		</div>
 	);
 }

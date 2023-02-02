@@ -10,9 +10,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Matchup {
+	id         Int      @id @default(autoincrement())
+  typeA     Type     @relation(name: "offensive",fields: [typeAName], references: [name])
+  typeAName  String
+  typeB     Type     @relation(name: "defensive",fields: [typeBName], references: [name])
+  typeBName  String
+  effectiveness Float
+}
+
 model Type { 
 	name 		 String  @id
 	pokemons PokemonType[] 
+	offensive Matchup[] @relation(name: "offensive")
+	defensive Matchup[] @relation(name: "defensive")
 }
 model PokemonType {
 	id			 Int @id @default(autoincrement())

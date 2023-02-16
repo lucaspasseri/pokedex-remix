@@ -7,7 +7,6 @@ import type { LoaderArgs } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
-import pokemonTypesImages from "~/images/pokemonTypes.webp";
 import PokemonTypeImage from "~/components/PokemonTypeImage";
 
 export const links: LinksFunction = () => {
@@ -149,16 +148,10 @@ export default function PokemonRoute() {
 
 			<h3 className="text-slate-100">{pokemon?.name}</h3>
 
-			<PokemonTypeImage typeName="fire" />
-			<PokemonTypeImage typeName="water" />
-			<PokemonTypeImage typeName="grass" />
-
-			<img src={pokemonTypesImages} alt="pokemonTypesImage" />
-
-			<ul>
-				{data?.pokemon?.types?.map(type => (
+			<ul className="flex">
+				{pokemon?.types.map(type => (
 					<li key={type.id}>
-						<h4 className="text-slate-100">{type.typeName}</h4>
+						<PokemonTypeImage typeName={type.typeName} />
 					</li>
 				))}
 			</ul>
@@ -169,7 +162,7 @@ export default function PokemonRoute() {
 			<p className="text-slate-100">
 				Peso: {pokemon?.weight && `${pokemon?.weight / 10} kg`}
 			</p>
-			<div className="flex mt-8">
+			{/* <div className="flex mt-8">
 				<ul className="p-4 border">
 					<p> Frágil contra:</p>
 					{effectiveMatchups.map(matchup => (
@@ -186,7 +179,7 @@ export default function PokemonRoute() {
 						</li>
 					))}
 				</ul>
-			</div>
+			</div> */}
 		</div>
 	);
 }

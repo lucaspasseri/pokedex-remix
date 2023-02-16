@@ -23,7 +23,7 @@ export default function PokemonTypeImage({ typeName }) {
 			x: sliceX + 2 * sliceWidth,
 			y: 0,
 		},
-		eletric: {
+		electric: {
 			x: sliceX + 3 * sliceWidth,
 			y: 0,
 		},
@@ -114,7 +114,7 @@ export default function PokemonTypeImage({ typeName }) {
 
 	return (
 		<div>
-			<canvas className="w-10" ref={canvasRef} />
+			<canvas className="w-20" ref={canvasRef} />
 		</div>
 	);
 }

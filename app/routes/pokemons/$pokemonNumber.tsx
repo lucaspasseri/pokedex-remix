@@ -7,6 +7,8 @@ import type { LoaderArgs } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import pokemonTypesImages from "~/images/pokemonTypes.webp";
+import PokemonTypeImage from "~/components/PokemonTypeImage";
 
 export const links: LinksFunction = () => {
 	return [
@@ -146,6 +148,12 @@ export default function PokemonRoute() {
 			</div>
 
 			<h3 className="text-slate-100">{pokemon?.name}</h3>
+
+			<PokemonTypeImage typeName="fire" />
+			<PokemonTypeImage typeName="water" />
+			<PokemonTypeImage typeName="grass" />
+
+			<img src={pokemonTypesImages} alt="pokemonTypesImage" />
 
 			<ul>
 				{data?.pokemon?.types?.map(type => (
